@@ -3,6 +3,7 @@ package main;
 import model.Person;
 import model.Student;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -23,8 +24,12 @@ public class TestStudent {
         students.add(new Student("Stuart", "Mark", 15, " second year ", 9));
         // 700 students;
 
-//        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
-//        passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
+        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
+        passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
+
+
+        Supplier studentSupplier = () -> students.add(new Student("Test", "Test", 16, " first year ", 10));
+        studentSupplier.get();
 
 
         bestStudents(students, (Student a) -> System.out.println(a.getName() + " performed great this season with a grade of " + a.getGrade()));

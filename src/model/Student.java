@@ -12,6 +12,12 @@ public class Student extends Person {
         this.year = year;
         this.grade = grade;
     }
+    public Student(String name, String surname, int grade){
+        super.name = name;
+        super.surname = surname;
+        this.grade = grade;
+
+    }
 
 
     public String getYear() {
