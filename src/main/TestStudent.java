@@ -1,13 +1,10 @@
 package main;
 
-import model.Person;
 import model.Student;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 
@@ -24,23 +21,47 @@ public class TestStudent {
         students.add(new Student("Stuart", "Mark", 15, " second year ", 9));
         // 700 students;
 
-        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
-        passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
 
-
+        //add a new Student using the Suplier
         Supplier studentSupplier = () -> students.add(new Student("Test", "Test", 16, " first year ", 10));
         studentSupplier.get();
 
+        System.out.println("============================================================================================");
 
+        //get all passing students
+        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
+        passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
+
+        System.out.println("============================================================================================");
+
+        //get all failing students
+        ts.failClass(students, a -> a.getGrade()<=4);
+
+        System.out.println("============================================================================================");
+
+        //get all above average students
         bestStudents(students, (Student a) -> System.out.println(a.getName() + " performed great this season with a grade of " + a.getGrade()));
 
-        ts.failClass(students, a -> a.getGrade()<=4);
+        System.out.println("============================================================================================");
+
+        //find the school average grade using BitConsumer and consumer
+        AtomicInteger sum = new AtomicInteger();
+        getGrades(students, (Student a) -> sum.addAndGet(a.getGrade()));
+        int result = sum.intValue();
+        BiConsumer<Double, Integer> findAverage = (x, y) -> System.out.println("School has a average grade of " + (x / y));
+        findAverage.accept((double) result, students.size());
+
+        System.out.println("============================================================================================");
+
+        //print the sum of students of the school
+        Function<Integer, String> numberOfStudents = t -> Integer.toString(t);
+        System.out.println("The school has a total of " + numberOfStudents.apply(students.size()) + " students.");
 
     }
     private void failClass(List<Student> students, Predicate<Student> predicate){
         for (Student student: students){
             if (predicate.test(student))
-                System.out.println(student.getName() + " " + student.getSurname() + " failed " + student.getYear() + " with a grade of " + student.getGrade() );
+                System.out.println(student.getName() + " " + student.getSurname() + " failed " + student.getYear());
         }
     }
 
@@ -51,5 +72,12 @@ public class TestStudent {
             }
         }
     }
+
+    static void getGrades(List<Student> students, Consumer<Student> consumer) {
+        for (Student student : students) {
+                consumer.accept(student);
+        }
+    }
+
 }
 
