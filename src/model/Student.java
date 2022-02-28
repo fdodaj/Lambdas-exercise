@@ -3,7 +3,7 @@ package model;
 public class Student extends Person {
     private String year;
     private int grade;
-    private boolean passesClass;
+
 
     public Student(String name, String surname,int age, String year, int grade) {
         super.name = name;
@@ -11,12 +11,6 @@ public class Student extends Person {
         super.age = age;
         this.year = year;
         this.grade = grade;
-        if (grade < 5)
-            this.passesClass = false;
-        else
-            this.passesClass = true;
-
-
     }
 
 
@@ -36,13 +30,6 @@ public class Student extends Person {
         this.grade = grade;
     }
 
-    public boolean passesClass() {
-        return passesClass;
-    }
-
-    public void setPassesClass(boolean passesClass) {
-        this.passesClass = passesClass;
-    }
 }
 
 
