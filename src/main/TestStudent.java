@@ -36,15 +36,19 @@ public class TestStudent {
 
 
         }
-        System.out.println("Enter two students indexes you want to compare");
-        int student1 = SCANNER.nextInt();
-        int student2 = SCANNER.nextInt();
-        boolean compare = filter.test(students.get(student1).getGrade(), students.get(student2).getGrade());
-        if (compare == false){
-            System.out.println(students.get(student2).getName() +"(" + students.get(student2).getGrade() + ")"   + " has a worse grade than " + students.get(student1).getName() + "(" + students.get(student1).getGrade() + ")" );  // true
-        }
-        else {
-            System.out.println(students.get(student1).getName()+ "(" + students.get(student1).getGrade() + ")" + " has a worse grade than " + students.get(student2).getName()+"(" + students.get(student2).getGrade() + ")"    );  // true
+        try {
+            System.out.println("Enter two students indexes you want to compare");
+            int student1 = SCANNER.nextInt();
+            int student2 = SCANNER.nextInt();
+            boolean compare = filter.test(students.get(student1).getGrade(), students.get(student2).getGrade());
+            if (compare == false){
+                System.out.println(students.get(student2).getName() +"(" + students.get(student2).getGrade() + ")"   + " has a worse grade than " + students.get(student1).getName() + "(" + students.get(student1).getGrade() + ")" );  // true
+            }
+            else {
+                System.out.println(students.get(student1).getName()+ "(" + students.get(student1).getGrade() + ")" + " has a worse grade than " + students.get(student2).getName()+"(" + students.get(student2).getGrade() + ")"    );  // true
+            }
+        }catch (Exception e){
+            System.out.println("You entered an invalid index :)");
         }
 
 
