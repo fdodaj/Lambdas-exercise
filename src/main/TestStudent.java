@@ -21,9 +21,10 @@ public class TestStudent {
         students.add(new Student("Stuart", "Mark", 15, " second year ", 9));
         // 700 students;
 
-        //BiPredicate to find if student "a" has a better grade than student "b"
-        BiPredicate<Integer, Integer> filter = (a, b) -> {
-            return a < b;};
+
+        //add a new Student using the Suplier
+        Supplier studentSupplier = () -> students.add(new Student("Test", "Test", 16, " first year ", 10));
+        studentSupplier.get();
 
 
         System.out.println("index |   Student");
@@ -34,57 +35,54 @@ public class TestStudent {
             System.out.print(students.get(counter).getName());
             System.out.println();
 
-
         }
+
+        //code that compares two students
         try {
             System.out.println("Enter two students indexes you want to compare");
             int student1 = SCANNER.nextInt();
             int student2 = SCANNER.nextInt();
             boolean compare = filter.test(students.get(student1).getGrade(), students.get(student2).getGrade());
-            if (compare == false){
-                System.out.println(students.get(student2).getName() +"(" + students.get(student2).getGrade() + ")"   + " has a worse grade than " + students.get(student1).getName() + "(" + students.get(student1).getGrade() + ")" );  // true
+
+            if (students.get(student1).getGrade() == students.get(student2).getGrade()){
+                System.out.println(students.get(student1).getName()+ "(" + students.get(student1).getGrade() + ")" + " has a the same grade as " + students.get(student2).getName()+"(" + students.get(student2).getGrade() + ")");
+            }
+            else if (!compare){
+                System.out.println(students.get(student2).getName() +"(" + students.get(student2).getGrade() + ")"   + " has a worse grade than " + students.get(student1).getName() + "(" + students.get(student1).getGrade() + ")" );
             }
             else {
-                System.out.println(students.get(student1).getName()+ "(" + students.get(student1).getGrade() + ")" + " has a worse grade than " + students.get(student2).getName()+"(" + students.get(student2).getGrade() + ")"    );  // true
+                System.out.println(students.get(student1).getName()+ "(" + students.get(student1).getGrade() + ")" + " has a worse grade than " + students.get(student2).getName()+"(" + students.get(student2).getGrade() + ")"    );
             }
         }catch (Exception e){
             System.out.println("You entered an invalid index :)");
         }
 
-
-        //add a new Student using the Suplier
-        Supplier studentSupplier = () -> students.add(new Student("Test", "Test", 16, " first year ", 10));
-        studentSupplier.get();
-
-        System.out.println("============================================================================================");
+        line();
 
         //get all passing students
         List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
         passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
 
-        System.out.println("============================================================================================");
+        line();
 
         //get all failing students
         ts.failClass(students, a -> a.getGrade()<=4);
 
-        System.out.println("============================================================================================");
+        line();
 
         //get all above average students
         bestStudents(students, (Student a) -> System.out.println(a.getName() + " performed great this season with a grade of " + a.getGrade()));
 
-        System.out.println("============================================================================================");
-
-        //find the school average grade using BitConsumer and consumer
+        line();
+        //print the school average grade
         AtomicInteger sum = new AtomicInteger();
         getGrades(students, (Student a) -> sum.addAndGet(a.getGrade()));
         int result = sum.intValue();
-        BiConsumer<Double, Integer> findAverage = (x, y) -> System.out.println("School has a average grade of " + (x / y));
         findAverage.accept((double) result, students.size());
 
-        System.out.println("============================================================================================");
+        line();
 
         //print the sum of students of the school
-        Function<Integer, String> numberOfStudents = t -> Integer.toString(t);
         System.out.println("The school has a total of " + numberOfStudents.apply(students.size()) + " students.");
 
     }
@@ -105,11 +103,31 @@ public class TestStudent {
         }
     }
 
+    //Function to find the number of students in the school
+    static Function<Integer, String> numberOfStudents = t -> Integer.toString(t);
+
+
     static void getGrades(List<Student> students, Consumer<Student> consumer) {
         for (Student student : students) {
                 consumer.accept(student);
         }
     }
 
+    //BiConsumer to find schools average grade
+    static BiConsumer<Double, Integer> findAverage = (x, y) -> System.out.println("School has a average grade of " + (x / y));
+
+
+    //BiPredicate to find if student "a" has a better grade than student "b"
+    static BiPredicate<Integer, Integer> filter = (a, b) -> {
+        return a < b;};
+
+    static  void line(){
+        int size = 0;
+        while (size < 70){
+            System.out.print("=");
+            size++;
+        }
+        System.out.println();
+    }
 }
 
