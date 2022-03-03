@@ -17,13 +17,13 @@ public class TestStudent {
         List<Student> students = new ArrayList<Student>();
         students.add(new Student("Florian", "Dodaj", 16, " first year ", 10));
         students.add(new Student("Peter", "Smith", 13, " second year ", 4));
-        students.add(new Student("John", "Lleshi", 19, " second year ", 6));
-        students.add(new Student("Stuart", "Mark", 15, " second year ", 9));
+        students.add(new Student("John", "Brown", 19, " second year ", 6));
+        students.add(new Student("Stuart", "Williams", 15, " second year ", 9));
         // 700 students;
 
 
-        //add a new Student using the Suplier
-        Supplier studentSupplier = () -> students.add(new Student("Test", "Test", 16, " first year ", 10));
+        //add a new Student using the Supplier
+        Supplier studentSupplier = () -> students.add(new Student("George", "Murphy", 16, " first year ", 10));
         studentSupplier.get();
 
 
@@ -37,7 +37,9 @@ public class TestStudent {
 
         }
 
-        //code that compares two students
+
+
+        //code that compares two students using BiPredicate
         try {
             System.out.println("Enter two students indexes you want to compare");
             int student1 = SCANNER.nextInt();
@@ -59,22 +61,29 @@ public class TestStudent {
 
         line();
 
-        //get all passing students
-        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
-        passedStudents.forEach( student -> System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
+        //Using BiFunction to find a students name and surname
+        System.out.println("Enter students id you want to get name and surname");
+        int studentNameAndSurname = SCANNER.nextInt();
+        System.out.println(bi.apply( "Student with id " +  studentNameAndSurname + " full name is : " + students.get(studentNameAndSurname).getName()  + " ", students.get(studentNameAndSurname).getSurname()));
 
         line();
 
-        //get all failing students
+        //get all passing students using Streams
+        List<Student> passedStudents = students.stream().filter(s -> s.getGrade() >= 5).collect(Collectors.toList());
+        passedStudents.forEach( student ->  System.out.println(student.getName()+ " " + student.getSurname() + " passed" + student.getYear()));
+
+        line();
+
+        //get all failing students using Predicate
         ts.failClass(students, a -> a.getGrade()<=4);
 
         line();
 
-        //get all above average students
+        //get all above average students using Consumer
         bestStudents(students, (Student a) -> System.out.println(a.getName() + " performed great this season with a grade of " + a.getGrade()));
 
         line();
-        //print the school average grade
+        //print the school average grade using BiConsumer
         AtomicInteger sum = new AtomicInteger();
         getGrades(students, (Student a) -> sum.addAndGet(a.getGrade()));
         int result = sum.intValue();
@@ -82,29 +91,13 @@ public class TestStudent {
 
         line();
 
-        //print the sum of students of the school
+        //print the sum of students of the school using Function
         System.out.println("The school has a total of " + numberOfStudents.apply(students.size()) + " students.");
 
+
+
+
     }
-
-    private void failClass(List<Student> students, Predicate<Student> predicate){
-        for (Student student: students){
-            if (predicate.test(student))
-                System.out.println(student.getName() + " " + student.getSurname() + " failed " + student.getYear());
-        }
-    }
-
-
-    static void bestStudents(List<Student> students, Consumer<Student> consumer) {
-        for (Student student : students) {
-            if (student.getGrade()>=9){
-                consumer.accept(student);
-            }
-        }
-    }
-
-    //Function to find the number of students in the school
-    static Function<Integer, String> numberOfStudents = t -> Integer.toString(t);
 
 
     static void getGrades(List<Student> students, Consumer<Student> consumer) {
@@ -113,14 +106,41 @@ public class TestStudent {
         }
     }
 
-    //BiConsumer to find schools average grade
-    static BiConsumer<Double, Integer> findAverage = (x, y) -> System.out.println("School has a average grade of " + (x / y));
-
 
     //BiPredicate to find if student "a" has a better grade than student "b"
     static BiPredicate<Integer, Integer> filter = (a, b) -> {
         return a < b;};
 
+    private void failClass(List<Student> students, Predicate<Student> predicate){
+        for (Student student: students){
+            if (predicate.test(student))
+                System.out.println(student.getName() + " " + student.getSurname() + " failed " + student.getYear() + student.getGrade()
+                );
+        }
+    }
+
+    //Get students with grade above 8 using Consumer
+    static void bestStudents(List<Student> students, Consumer<Student> consumer) {
+        for (Student student : students) {
+            if (student.getGrade()>=9){
+                consumer.accept(student);
+            }
+        }
+    }
+
+    //BiConsumer to find schools average grade
+    static BiConsumer<Double, Integer> findAverage = (x, y) -> System.out.println("School has a average grade of " + (x / y));
+
+    //Function to find the number of students in the school
+    static Function<Integer, String> numberOfStudents = t -> Integer.toString(t);
+
+
+    //BiFunction that adds two string(in the concrete example Name and Surname)
+    static BiFunction<String, String,String> bi = (x, y) -> {
+        return x + y;
+    };
+
+    
     static  void line(){
         int size = 0;
         while (size < 70){

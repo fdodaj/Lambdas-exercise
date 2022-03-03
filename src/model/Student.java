@@ -1,5 +1,7 @@
 package model;
 
+import java.util.function.UnaryOperator;
+
 public class Student extends Person {
     private String year;
     private int grade;
@@ -32,7 +34,7 @@ public class Student extends Person {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(Integer grade) {
         this.grade = grade;
     }
 
