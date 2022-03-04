@@ -5,6 +5,7 @@ import java.util.function.UnaryOperator;
 public class Student extends Person {
     private String year;
     private int grade;
+<<<<<<< HEAD
     public static int counter;
     public int count;
 
@@ -14,8 +15,18 @@ public class Student extends Person {
         count++;
     }
 
+=======
+    private boolean passesClass;
+    public static int counter;
+    public int count;
+>>>>>>> main
 
-    public Student(String name, String surname,int age, String year, int grade) {
+    public Student() {
+        counter++;
+        count++;
+    }
+
+    public Student(String name, String surname, int age, String year, int grade) {
         super.name = name;
         super.surname = surname;
         super.age = age;
