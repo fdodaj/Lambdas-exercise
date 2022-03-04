@@ -4,8 +4,15 @@ public class Student extends Person {
     private String year;
     private int grade;
     private boolean passesClass;
+    public static int counter;
+    public int count;
 
-    public Student(String name, String surname,int age, String year, int grade) {
+    public Student() {
+        counter++;
+        count++;
+    }
+
+    public Student(String name, String surname, int age, String year, int grade) {
         super.name = name;
         super.surname = surname;
         super.age = age;
